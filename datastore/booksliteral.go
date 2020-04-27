@@ -1,4 +1,4 @@
-package loader
+package datastore
 
 // BooksLiteral is a slice literal of Bookdata struct pointers, containing a subset of the real book data
 // Once you have created your CSV loader, you will not need this file.

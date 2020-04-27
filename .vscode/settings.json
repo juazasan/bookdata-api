@@ -4,5 +4,6 @@
         "diagnostics": true,
         "documentLink": true,
         "format": true
-    }
+    },
+    "terminal.integrated.shell.linux": "/bin/sh"
 }
