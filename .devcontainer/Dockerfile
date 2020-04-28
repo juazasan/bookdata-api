@@ -9,6 +9,7 @@ ENV GO111MODULE=on
 RUN apk update && apk add --no-cache \
     git \
     gcc g++ libc6-compat \
+    make \
     docker-cli
 
 ## Install Golang analysis tools
@@ -24,5 +25,4 @@ RUN go get -v golang.org/x/tools/gopls@latest && \
     go get -v github.com/uudashr/gopkgs/v2/cmd/gopkgs@latest && \
     go get -v github.com/stamblerre/gocode@latest && \
     go get -v github.com/rogpeppe/godef@latest && \
-    go get -v github.com/sqs/goreturns@latest && |
-    go get -v github.com/google/uuid
+    go get -v github.com/sqs/goreturns@latest

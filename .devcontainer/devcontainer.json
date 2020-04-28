@@ -1,6 +1,6 @@
 {
     "name": "Golang dev container",
-    "dockerFile": "Dockerfile.devcontainer",
+    "dockerFile": "Dockerfile",
     "mounts": ["source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"],
     "extensions": [
         "ms-vscode.go",
@@ -13,5 +13,9 @@
         "seccomp=unconfined",
         "--security-opt",
         "apparmor=unconfined"
-    ]
+    ],
+    "remoteEnv": {
+        // Pass in the host directory for Docker mount commands from inside the container
+        "HOST_PROJECT_PATH": "${localWorkspaceFolder}"
+      }
 }
