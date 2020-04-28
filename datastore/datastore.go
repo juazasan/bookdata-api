@@ -6,6 +6,11 @@ package datastore
 type BookStore interface {
 	Initialize()
 	GetAllBooks(limit, skip int) *[]*BookData
+	SearchByAuthor(author string) *[]*BookData
+	SearchByTitle(title string) *[]*BookData
+	SearchByISBN(isbn string) *BookData
+	DeleteByISBN(isbn string) int
+	AddBook(newBook BookData) (*BookData, int)
 }
 
 // BookData is the record structure of the books datastore

@@ -6,6 +6,9 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
+
+	guuid "github.com/google/uuid"
 )
 
 // Books is the memory-backed datastore used by the API
@@ -66,4 +69,79 @@ func (b *Books) GetAllBooks(limit, skip int) *[]*BookData {
 	}
 	ret := (*b.Store)[skip:limit]
 	return &ret
+}
+
+// SearchByAuthor returns books by Author
+func (b *Books) SearchByAuthor(author string) *[]*BookData {
+	var booksFound []*BookData
+	for _, book := range *b.Store {
+		if strings.Contains(strings.ToLower(book.Authors), strings.ToLower(author)) {
+			log.Println("Found book" + book.Title + "written by " + author)
+			booksFound = append(booksFound, book)
+		}
+	}
+	return &booksFound
+}
+
+// SearchByTitle returns books by Title
+func (b *Books) SearchByTitle(title string) *[]*BookData {
+	var booksFound []*BookData
+	for _, book := range *b.Store {
+		if strings.Contains(strings.ToLower(book.Title), strings.ToLower(title)) {
+			log.Println("Found book" + book.Title)
+			booksFound = append(booksFound, book)
+		}
+	}
+	return &booksFound
+}
+
+// SearchByISBN returns book by ISBN
+func (b *Books) SearchByISBN(isbn string) *BookData {
+	var bookFound *BookData
+	for _, book := range *b.Store {
+		if strings.ToLower(book.ISBN) == strings.ToLower(isbn) {
+			log.Println("Found book" + book.Title + " with ISBN:" + isbn)
+			bookFound = book
+			break
+		}
+	}
+	return bookFound
+}
+
+// DeleteByISBN deletes book by ISBN
+func (b *Books) DeleteByISBN(isbn string) int {
+	var newStore []*BookData
+	returnCode := 404
+	for _, book := range *b.Store {
+		if strings.ToLower(book.ISBN) != strings.ToLower(isbn) {
+			newStore = append(newStore, book)
+		} else {
+			log.Println("Removed book with ISBN " + isbn + " from the Store")
+			returnCode = 200
+		}
+	}
+	if returnCode == 404 {
+		log.Println("No book with ISBN " + isbn + " found in the Store")
+	}
+	b.Store = &newStore
+	return returnCode
+}
+
+// AddBook adds a new Book to the Store
+func (b *Books) AddBook(newBook BookData) (*BookData, int) {
+	var returnCode int
+	if b.SearchByISBN(newBook.ISBN) == nil {
+		newBook.BookID = guuid.New().String()
+		bookReader := *b.Store
+		log.Println(len(*b.Store))
+		log.Println(len(bookReader))
+		bookReader = append(bookReader, &newBook)
+		log.Println(len(bookReader))
+		b.Store = &bookReader
+		log.Println(len(*b.Store))
+		returnCode = 200
+	} else {
+		returnCode = 409
+	}
+	return &newBook, returnCode
 }
