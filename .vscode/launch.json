@@ -10,7 +10,9 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}",
-            "env": {},
+            "env": {
+                "BOOKS_DATABASE_FILE": "./assets/books.csv"
+            },
             "args": []
         },
         {
@@ -19,7 +21,9 @@
             "request": "launch",
             "mode": "debug",
             "program": "${workspaceFolder}",
-            "env": {},
+            "env": {
+                "BOOKS_DATABASE_FILE": "../assets/books.csv"
+            },
             "args": []
         }
     ]
